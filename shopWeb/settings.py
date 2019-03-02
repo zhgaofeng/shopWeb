@@ -14,7 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+SETTINGS_DIR = os.path.dirname(__file__)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'shopWeb.apps.catalog',
+    'shopWeb.apps.cart',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,9 @@ ROOT_URLCONF = 'shopWeb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(SETTINGS_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'shopWeb.utils.context_processors.shopsys',
             ],
         },
     },
@@ -75,8 +80,16 @@ WSGI_APPLICATION = 'shopWeb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shopWeb',
+        'USER': 'zgf',
+        'PASSWORD': '12345678', #为安全起见，应从系统环境变量读取，os.environ['SHOPWEB_DB_PASS']
+        'HOST': '127.0.0.1',
+        "PORT": '3306',
+        #'TEST'： {}             #测试数据库配置
+
     }
 }
 
@@ -117,4 +130,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+STATICFILES_DIRS = (
+    os.path.join(SETTINGS_DIR,'static'),
+)
+
 STATIC_URL = '/static/'
+
+#用户上传的文件位置
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
+
+#站点设置
+SITE_NAME = '购物网站'
+META_KEYWORDS = '购物网站，特价电子产品，精致女装，双12特惠'
+META_DESCRIPTION = '''购物网站-中国最大、最安全的网上交易平台 '''
